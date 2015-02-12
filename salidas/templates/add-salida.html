@@ -1,0 +1,104 @@
+{% extends "base.html" %} 
+{% load static from staticfiles %}
+{% block header %}
+<div class="bodywhite">
+	{% include "menucoco.html" %}
+	<div class="container">	
+		<div class="row ">
+			<div class="col-xs-9 text-left">
+				<header class="text-capitalize activo">
+					<div class="page-header">
+						<h1>{{ page_title }}</h1>
+					</div>
+				</header>
+			</div>
+			<div class="col-xs-3 text-right">
+				<header class="text-capitalize activo">
+					<h1><span class="glyphicon glyphicon-send azul" aria-hidden="true"></span></h1>
+				</header>
+			</div>
+		</div>
+    	
+{% endblock %} 
+{% block contedor %}
+		<div class="row text-center">
+				<div class="col-md-3 text-center botton thumbnail">	
+					<img src="{{ p.imagen.url }}" class="img-responsive text-center" />				    		     
+				</div> 
+				<div class="col-md-3 text-left botton ">
+					<ul class="list-unstyled">
+						<li><b>Nombre:</b> {{p.name}}</li>
+						<li><b>Precio:</b> ${{p.unit_price}}</li>
+						<li><b>Peso:</b> {{p.peso}} kg</li>
+						<li><b>Stock:</b> {{p.stock}} </li>						
+					</ul>
+					
+				</div>
+				<div class="col-md-3  col-md-offset-3 text-left">	
+				<h3>Salidas</h3>
+					<form role="form" action="."  method="post" role="form" >{% csrf_token %} 
+						
+						<input class="form-control" type="hidden" name="producto" id="id_producto" value="{{p.pk}}">
+						
+						<label for="id_cantidad">Cantidad:</label>
+						<input class="form-control" type="number" name="cantidad" id="id_cantidad" autofocus required/>
+						<div class="form-group">
+							<label for="id_fecha_de_elaboracion">Fecha:</label>
+							<div class='input-group date' id='datetimepicker'>								
+								<input type="text" class="form-control" name="fecha_de_salida" id="fecha_de_salida"  placeholder="dd/mm/yyyy" required/>
+								<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+								</span>
+							</div>
+						</div>							
+						<input type="hidden" name="stock" id="id_stock" value="" required />										
+						<button type="submit" id="comment-button" class="btn principal-btn" name="_save">Guardar</button>
+					</form>	
+					<input type="hidden" name="stock1" id="stock" value="{{p.stock}}">		    		     
+				</div> 
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+{% block scripts_adicionales %}
+
+<script type="text/javascript"
+  src="{% static "js/moment.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/bootstrap-datetimepicker.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/es.js" %}">
+</script>
+<script>
+$(function () {
+	var f = new Date();
+    $('#datetimepicker').datetimepicker({
+        language: 'es',
+        pickTime: false,
+        defaultDate: f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear()
+
+    });
+
+$('#id_cantidad').change(function(){
+	var cantidad = 0;
+	var stock = $("#stock").val();
+
+	cantidad = $("#id_cantidad").val();
+	
+	
+
+	$("#id_stock").val(parseInt(stock)-parseInt(cantidad));    
+	var cantidad = 0;
+
+
+}); 
+	
+	
+});  
+
+</script>
+
+
+{% endblock %}  

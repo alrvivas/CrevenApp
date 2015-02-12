@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% load i18n %}
+{% load shop_tags %}
+
+{% block header %}
+<div class="bodywhite">
+	{% include "menu.html" %}
+	<div class="container">	
+		<div class="row ">
+			<div class="col-xs-6 text-left">
+				<header class="text-capitalize activo">
+					<h1>{{ object }}</h1>
+				</header>
+			</div>
+			<div class="col-xs-6 text-right">
+				<header class="text-capitalize activo">
+					<h1><span class="glyphicon glyphicon-shopping-cart azul-gradient" aria-hidden="true"></span></h1>
+				</header>
+			</div>
+		</div>
+    	
+{% endblock %} 
+{% block contedor %} 
+		<div class="row text-center"> 
+			<div class="col-md-12 text-left botton areaprint"> 
+				{% order object %}
+			</div>
+			<div class="col-md-12 text-right botton "> 
+				<button class=" btn backazul blanco btnprint " value="Next" >
+					<span class="glyphicon glyphicon-print blanco"></span>
+				</button>
+			</div>			
+		</div>
+	</div>
+</div>
+  
+{% endblock %}
+{% block scripts_adicionales %}
+
+<script type="text/javascript"
+  src="{% static "js/print.js" %}">
+</script>
+ 
+<script>
+ $(document).ready(function(){
+
+        
+
+        $(".btnprint").click(function(){          
+
+            $( ".areaprint" ).printArea();
+        });
+    });
+</script>
+
+
+{% endblock %} 

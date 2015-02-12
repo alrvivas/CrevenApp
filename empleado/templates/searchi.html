@@ -1,0 +1,123 @@
+{% extends "base.html" %} 
+{% load static from staticfiles %}
+{% block header %}
+<div class="bodywhite">
+	{% for emp in empleado %}  	
+	  {% ifequal emp.departamento.nombre "Ventas" %}
+	    {% include "menucoco.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Producción" %}
+	    {% include "menuproduccion.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Control de Calidad" %}
+	    {% include "menucc.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Dirección" %}
+	    {% include "menudir.html" %}
+	  {% endifequal %}
+	{% empty%}
+	    No hay usuarios
+	{% endfor %}
+    <div class="container">
+		<div class="row ">
+			<div class="col-xs-8 text-left">
+				<header class="text-capitalize activo">
+					<h1>{{page_title}}</h1>
+				</header>
+			</div>
+			<div class="col-xs-4 text-right">				
+				<h1><span class="glyphicon glyphicon-dashboard azul" aria-hidden="true"></span></h1>				
+			</div>
+		</div>
+{% endblock %} 
+{% block contedor %}
+		<div class="row text-center">					
+			{% for emp in empleado %}  	
+				{% ifequal emp.departamento.nombre "Dirección" %}
+				<div class="col-md-3 text-center botton ">
+					<form action="." method="GET" class="navbar-form navbar-left" role="search">  
+			            <div class="form-group col-xs-10">             
+			              <div class='input-group date' id='datetimepicker'> 
+			                <input type="text" name="q" value="{{ query|escape }}" class="form-control" placeholder="Buscar">
+			                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+			                </span>
+			              </div>
+
+			            </div> 
+			            <div class="col-xs-2">
+			              <button type="submit" class="btn backazul "><span class="glyphicon glyphicon-search blanco"></span></button>
+			            </div> 
+			            
+		          	</form>
+		        </div>
+				<div class="col-md-3 text-center botton ">
+					<a href="{% url 'salidas' %}"><h4>Salidas</h4>
+					<p id="salidas" class="icontres text-center verde">{{ salidas.cantidad__sum }}</p></a>		    	
+				</div>
+				<div class="col-md-3 text-center botton ">
+					<h4>Devoluciones</h4>
+					<p id="devoluciones" class="icontres text-center rojo">{{ devoluciones_b.cantidad__sum }}</p>
+				</div>
+				<div class="col-md-3 text-center botton ">
+					<h4>Ventas Netas</h4>
+					<p id="ventas-netas" class="icontres text-center verde"></p>
+				</div>
+			  	{% endifequal %}
+			{% empty%}
+			    No hay usuarios
+			{% endfor %}
+			
+		</div>
+	</div>
+</div>
+
+<script>
+$(function () {
+    $('#datetimepicker').datetimepicker({
+        language: 'es',
+        pickTime: false,
+        format: 'YYYY-MM-DD'
+
+    });
+  
+});  
+
+</script>
+{% endblock %}
+{% block scripts_adicionales %}
+
+<script>
+$(function () {
+    $('#datetimepicker').datetimepicker({
+        language: 'es',
+        pickTime: false,
+        format: 'YYYY-MM-DD'
+
+    });
+  
+});  
+
+</script>
+<script type="text/javascript"
+	src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCFiqA2UgXb9FkqFkuLcck53NOx07w3ers&sensor=TRUE">
+</script>
+<script type="text/javascript"
+	src="{% static "js/ubicacion.js" %}">
+</script>
+<script type="text/javascript">
+	$( ".reload" ).click(function() {
+		setTimeout("location.reload(true);",1000);
+});
+</script>
+<script type="text/javascript">
+window.onload = function() {    
+    var salidas = document.getElementById("salidas").innerHTML
+    var devoluciones = document.getElementById("devoluciones").innerHTML   
+	var ventas_netas = parseInt(salidas) - parseInt(devoluciones);
+	document.getElementById("ventas-netas").innerHTML = ventas_netas;
+	
+	
+};
+</script>
+
+{% endblock %}  

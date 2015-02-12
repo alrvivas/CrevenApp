@@ -1,0 +1,95 @@
+{% extends "base.html" %} 
+{% load static from staticfiles %}
+{% block header %}
+<div class="bodywhite">
+	{% include "menucc.html" %}
+	<div class="container">	
+		<div class="row ">
+			<div class="col-xs-9 text-left">
+				<header class="text-capitalize activo">
+					<div class="page-header">
+						<h1>{{ page_title }}</h1>
+					</div>
+				</header>
+			</div>
+			<div class="col-xs-3 text-right">
+				<header class="text-capitalize activo">
+					<h1><span class="glyphicon glyphicon-refresh verde" aria-hidden="true"></span></h1>
+				</header>
+			</div>
+		</div>
+    	
+{% endblock %} 
+{% block contedor %}
+		<div class="row text-center">
+				<div class="col-md-3 text-center botton thumbnail">	
+					<img src="{{ devolucion_r.producto.imagen.url }}" class="img-responsive text-center" />				    		     
+				</div> 
+				<div class="col-md-3 text-left botton ">
+					
+					<ul class="list-unstyled">									
+						<li><b>Nombre:</b> {{devolucion_r.producto.name}}</li>
+						<li><b>Cantidad:</b> {{devolucion_r.cantidad}}</li>
+						<li><b>Fecha de Entrada:</b>{{devolucion_r.fecha_de_entrada}}</li>
+						<li>					
+						</li>
+						<li>
+							<b>Observación:</b> <br /> <p class="">{{ devolucion_r.observacion  }} 
+						</li>	
+					</ul>
+					<form role="form" action="."  method="post" role="form" >{% csrf_token %} 
+						
+						<input class="form-control" type="hidden" name="producto" id="id_producto" value="{{devolucion_r.producto.pk}}">
+						<div class="form-group">
+							<label for="id_cantidad">Cantidad:</label>
+							<input class="form-control" type="number" name="cantidad" id="id_cantidad" value="{{ devolucion_r.cantidad }}">
+						</div>
+						<input type="hiiden" class="form-control" name="fecha_de_entrada" id="fecha_de_entrada"  
+						value="{{ devolucion_r.fecha_de_entrada|date:"d/m/Y" }}" required/>											
+						<button type="submit" id="comment-button" class="btn principal-btn" name="_save">Guardar</button>
+					</form>
+					
+				</div>
+				<div class="col-md-3  text-center">	
+					<h3>Devolución Buena</h3>
+						<a href="{{ devolucion_r.producto.get_absolute_urldb }}">
+							<div class="col-md-10 col-md-offset-1 text-center redondo backazul">
+								<span class="glyphicon glyphicon-thumbs-up iconseis padocho blanco" ></span>
+							</div>
+						</a>	    		     
+				</div>					
+				<div class="col-md-3  text-center">	
+					<h3>Devolucion Mala</h3>
+						<a href="{{ devolucion_r.producto.get_absolute_urldm }}">
+							<div class="col-md-10 col-md-offset-1 text-center redondo backrojo">
+								<span class="glyphicon glyphicon-thumbs-down iconseis padocho blanco" ></span>
+							</div>
+						</a>	    		     
+				</div> 
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+{% block scripts_adicionales %}
+
+<script type="text/javascript"
+  src="{% static "js/moment.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/bootstrap-datetimepicker.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/es.js" %}">
+</script>
+<script>
+$(function () {
+    $('#datetimepicker').datetimepicker({
+        language: 'es'
+
+    });
+});  
+</script>
+
+
+{% endblock %}  

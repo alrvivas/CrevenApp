@@ -1,0 +1,73 @@
+{% load i18n %}
+{% load shop_tags %}
+      <h3>Folio: {{ order.pk }}</h3>
+
+      <p>
+        Estatus: {{ order.get_status_display }}
+      </p>
+      <div class="col-md-6 text-left botton "> 
+            <strong>Dirección de Envío</strong><br>
+            {% if order.shipping_address_text %}<textarea class="form-control">{{ order.shipping_address_text }}</textarea>{% endif %}
+      </div>
+      <div class="col-md-6 text-left botton ">     
+            <strong>Dirección de Pago</strong><br>
+            {% if order.billing_address_text %}<textarea class="form-control">{{ order.billing_address_text }}</textarea>{% endif %}
+      </div>
+        
+
+      <table class="table order">
+        <thead>
+          <tr>
+          <th>Producto</th>
+          <th>Precio</th>
+          <th>Cantidad</th>
+          <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for item in order.items.all %}
+            <tr>
+              <td>{{item.product_name}}</td>
+              <td>${{ item.unit_price|floatformat:2 }}</td>
+              <td>{{item.quantity}}</td>
+              <td>${{item.line_subtotal|floatformat:2 }}</td>
+            </tr>
+            {% for item_extra in item.extraorderitempricefield_set.all %}
+              <tr>
+                <td colspan="2">&nbsp;</td>
+                <td>{{ item_extra.label }}</td>
+                <td>{{ item_extra.value }}</td>
+              </tr>
+            {% endfor %}
+            <!--<tr><td colspan="2">&nbsp;</td><td>{% trans "Line Total" %}:</td><td>{{item.line_total }}</td></tr>-->
+          {% endfor %}
+        </tbody>
+
+        <tfoot>
+          <!--<tr>
+            <td colspan="2">&nbsp;</td>
+            <td>Total</td>
+            <td>{{order.order_subtotal }}</td>
+          </tr>-->
+          {% for extra_price_field in order.extraorderpricefield_set.all %}
+            <!--<tr>
+              <td colspan="2">&nbsp;</td>
+              <td>{{ extra_price_field.label }}</td>
+              <td>{{ extra_price_field.value }}</td>
+            </tr>-->
+          {% endfor %}
+          <tr>
+            <td colspan="2">&nbsp;</td>
+            <td>
+              <b>Total</b>
+            </td>
+            <td><b>${{order.order_total|floatformat:2}}</b>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+
+      {% for extra_info in order.extra_info.all  %}
+        <p>{{ extra_info.text }}</p>
+      {% endfor %}

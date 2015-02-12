@@ -1,0 +1,100 @@
+{% extends "base.html" %} 
+{% load static from staticfiles %}
+{% block header %}
+<div class="bodywhite">
+	{% include "menucoco.html" %}
+	<div class="container">	
+		<div class="row ">
+			<div class="col-xs-9 text-left">
+				<header class="text-capitalize activo">
+					<div class="page-header">
+						<h1>{{ page_title }}</h1>
+					</div>
+				</header>
+			</div>
+			<div class="col-xs-3 text-right">
+				<header class="text-capitalize activo">
+					<h1><span class="glyphicon glyphicon-thumbs-up azul" aria-hidden="true"></span></h1>
+				</header>
+			</div>
+		</div>
+    	
+{% endblock %} 
+{% block contedor %}
+			<div class="row text-center">
+				<div class="col-md-3 text-center botton thumbnail">	
+					<img src="{{ p.imagen.url }}" class="img-responsive text-center" />				    		     
+				</div> 
+				<div class="col-md-3 text-left botton ">
+					<ul class="list-unstyled">
+						<li><b>Nombre:</b> {{p.name}}</li>
+						<li><b>Precio:</b> ${{p.unit_price}}</li>
+						<li><b>Peso:</b> {{p.peso}} kg</li>
+						<li><b>Existencias:</b> {{p.stock}} </li>						
+					</ul>
+					
+				</div>
+				<div class="col-md-3  col-md-offset-3 text-left">	
+				<h3>Saldo</h3>
+					<form role="form" action="."  method="post" role="form" >{% csrf_token %} 
+						
+						<input class="form-control" type="hidden" name="producto" id="id_producto" value="{{p.pk}}">
+						<div class="form-group form">
+							<label for="id_cantidad">Cantidad:</label>
+							<input class="form-control" type="number" name="cantidad" id="id_cantidad" value="{{p.stock}}" required/>
+						</div>
+						<div class="form-group">
+							<label for="id_cantidad">Estatus:</label>	
+							<select name="estatus" class="form-control" id="estatus"  required>
+								<option value="" selected disabled>Seleccione uno</option>
+								{% for e in estatus %}
+									<option value="{{ e.id }}"> {{ e.nombre }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="id_cantidad">Observación:</label>	
+							<textarea  class="form-control" name="observacion"></textarea>
+						</div>
+						<input type="hidden" name="stock" id="id_stock" value="{{p.stock}}">										
+						<button type="submit" id="comment-button" class="btn principal-btn " name="_save">Guardar</button>
+					</form>		    		     
+				</div> 
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block scripts_adicionales %}
+
+<script type="text/javascript"
+  src="{% static "js/moment.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/bootstrap-datetimepicker.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/es.js" %}">
+</script>
+<script>
+
+$(function () {
+    $('#datetimepicker').datetimepicker({
+        language: 'es'
+
+    });	
+});  
+
+
+</script>
+<script type="text/javascript">//<![CDATA[ 
+	$(function(){
+	$('#id_cantidad').on('change', function() {
+	    var stock = $("#id_cantidad").val();	
+	    $("#id_stock").val(parseInt(stock)); 
+	})
+
+
+	});//]]>  
+</script>
+
+{% endblock %}  

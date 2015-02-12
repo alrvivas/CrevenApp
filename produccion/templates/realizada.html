@@ -1,0 +1,160 @@
+{% extends "base.html" %} 
+{% load static from staticfiles %}
+{% block header %}
+<div class="bodywhite">
+	{% for emp in empleado %}  	
+	  {% ifequal emp.departamento.nombre "Ventas" %}
+	    {% include "menucoco.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Producción" %}
+	    {% include "menuproduccion.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Control de Calidad" %}
+	    {% include "menucc.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Dirección" %}
+	    {% include "menudir.html" %}
+	  {% endifequal %}
+	{% empty%}
+	    No hay usuarios
+	{% endfor %}
+	<div class="container">	
+		<div class="row ">
+			<div class="col-xs-9 text-left">
+				<header class="text-capitalize activo">
+					<div class="page-header">
+						<h1>{{ page_title }}</h1>
+					</div>
+				</header>
+			</div>
+			<div class="col-xs-3 text-right">
+				<header class="text-capitalize activo">
+					<h1><span class="glyphicon glyphicon-list-alt azul" aria-hidden="true"></span></h1>
+				</header>
+			</div>
+		</div>
+    	
+{% endblock %} 
+{% block contedor %}
+		<div class="row text-center">
+				<div class="col-md-3 text-center botton thumbnail">	
+					<img src="{{ produccion_r.producto.imagen.url }}" class="img-responsive text-center" />				    		     
+				</div> 
+				<div class="col-md-3 text-left botton ">					
+					<ul class="list-unstyled">
+						<li>
+							<b>Fecha de Elabaración:</b><br /><p>{{produccion_r.fecha_de_elaboracion}}</p>
+						</li>
+						<li>
+							<b>Producción Realizada:</b><br /> <p class="icontres text-center verde">{{produccion_r.cantidad}}</p>
+						</li>
+						<li>
+							<b>Producción Esperada:</b><br /> <p class="icontres text-center verde">{{produccion_r.produccion_esperada.cantidad}}</p>
+						</li>
+						<li>
+							<b>Observación:</b> <br /> <p class="">{{ produccion_r.observacion  }} 
+						</li>	
+					</ul>
+					<form role="form" action="."  method="post" role="form" >{% csrf_token %} 
+						
+						<input class="form-control" type="hidden" name="producto" id="id_producto" value="{{produccion_r.producto.pk}}">
+						<div class="form-group">
+							<label for="id_cantidad">Cantidad:</label>
+							<input class="form-control" type="number" name="cantidad" id="id_cantidad" value="{{ produccion_r.cantidad }}">
+						</div>
+						<input type="hidden" class="form-control" name="fecha_de_elaboracion" id="fecha_de_elaboracion"  
+						value="{{ produccion_r.fecha_de_elaboracion|date:"d/m/Y" }}"  required/>
+						<input type="hidden" name="produccion_esperada" value="{{ produccion_r.produccion_esperada.id}}">
+						<input class="form-control" type="hidden" id="cantidad" value="{{ produccion_r.cantidad }}"	>			
+						<input type="hidden" name="stock" id="id_stock" value="">							
+						<input type="hidden" name="stock1" id="stock" value="{{produccion_r.producto.stock}}">										
+						<button type="submit" id="comment-button" class="btn principal-btn" name="_save">Guardar</button>
+					</form>
+					
+				</div>
+				<div class="col-md-4 col-md-offset-1  text-center">	
+					<h3>Eficiencia Producto Envasado</h3>							
+						<span class="glyphicon iconseis  verde" >{{ produccion_r.get_rendimiento|floatformat:2 }}%</span>    
+				</div>
+					  
+				
+		</div>
+		<div class="row text-left">
+			<div class="col-md-12  botton ">
+				<h3 class="">Últimos 7 Días</h3>	
+				<table  class="table">
+			        <thead>
+					<tr>						  
+						<th >Realizada</th>  
+						<th >Esperada</th>           
+						<th >Rendimiento</th>  
+						<th >Fecha</th>
+						
+					</tr>
+			        </thead>			        
+			        <tbody class="text-left">
+			        	
+			          	{%for item in produccion_rs %}
+				          	{% ifequal item.producto.id produccion_r.producto.id %}
+				          		<tr>
+					            	
+						            <td>
+						            	{{ item.cantidad }} 
+						            </td>
+					            	<td>
+					            		{{ item.produccion_esperada.cantidad}}
+					            	</td>
+					            	<td>
+					            		{{ item.get_rendimiento|floatformat:2 }}%
+					            	</td>
+					            	<td>
+					            		{{ item.fecha_de_elaboracion }}
+					            	</td>
+					            </tr>
+
+					        {% endifequal %}				            
+						{% endfor %}         
+			            
+			          				            
+			        </tbody>
+			        </table>			    		     
+			</div>			
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+{% block scripts_adicionales %}
+
+<script type="text/javascript"
+  src="{% static "js/moment.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/bootstrap-datetimepicker.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/es.js" %}">
+</script>
+<script>
+$(function () {
+    $('#datetimepicker').datetimepicker({
+        language: 'es'
+
+    });
+    var cantidadini = $("#id_cantidad").val();
+   $('#id_cantidad').change(function(){
+		var cantidad = 0;
+		var stock = $("#stock").val();
+		cantidad = $("#id_cantidad").val();
+
+		if(cantidad < cantidadini){
+			$("#id_stock").val(parseInt(stock)-parseInt(cantidadini - cantidad)); 
+		}else{
+			$("#id_stock").val(parseInt(stock)+parseInt(cantidad - cantidadini)); 
+		}
+	});
+});  
+</script>
+
+
+{% endblock %}  

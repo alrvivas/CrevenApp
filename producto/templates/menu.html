@@ -1,0 +1,10 @@
+{% for emp in empleado %}  	
+	{% ifequal emp.departamento.nombre "Ventas" %}
+	    {% include "menucoco.html" %}
+  	{% endifequal %}
+  	{% ifequal emp.departamento.nombre "Producción" %}
+	    {% include "menuproduccion.html" %}
+  	{% endifequal %}
+{% empty%}
+	    No hay usuarios
+{% endfor %}

@@ -1,0 +1,44 @@
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Navegación</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      {% url 'index' as home_url %}
+      {% if request.path != home_url %}
+        <a class="navbar-brand" href="{{request.META.HTTP_REFERER}}"><span class="glyphicon glyphicon-chevron-left azul" aria-hidden="true"></span></a>
+      {% endif %}
+      <a class="navbar-brand" href="{% url 'index' %}">Campoapp</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="{% url 'catalogo' %}">Productos</a></li>
+        <li><a href="{% url 'salidas' %}">Salidas</a></li>
+        
+        <li><a href="{% url 'inventario' %}">Inventarios</a></li>
+        <li><a href="{% url 'saldos' %}">Saldos</a></li>
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">{{ user.username }}</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Cuenta <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">Configuración<span class="glyphicon glyphicon-cog pull-right" aria-hidden="true"></span></a></li>
+            <li><a href="#">Reportar Problema</a></li>
+            <li><a href="#">Acerca de</a></li>
+            <li class="divider"></li>
+            <li><a href="/logout/">Salir<span class="glyphicon glyphicon-log-out pull-right" aria-hidden="true"></span></a></li>
+          </ul>
+        </li>
+      </ul>      
+     
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>

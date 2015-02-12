@@ -1,0 +1,96 @@
+{% extends "base.html" %} 
+{% load static from staticfiles %}
+{% block header %}
+<div class="bodywhite">
+	{% include "menucoco.html" %}
+	<div class="container">	
+		<div class="row ">
+			<div class="col-xs-9 text-left">
+				<header class="text-capitalize activo">
+					<div class="page-header">
+						<h1>{{ page_title }}</h1>
+					</div>
+				</header>
+			</div>
+			<div class="col-xs-3 text-right">
+				<header class="text-capitalize activo">
+					<h1><span class="glyphicon glyphicon-thumbs-up azul" aria-hidden="true"></span></h1>
+				</header>
+			</div>
+		</div>
+    	
+{% endblock %} 
+{% block contedor %}
+		<div class="row text-center">
+				<div class="col-md-12 text-left table-responsive "> 
+			        <table  class="table">
+			        <thead>
+					<tr>
+						<th >Producto</th>
+						<th >Cantidad</th>
+						<th >Kilos</th> 
+						<th >Observación</th>
+						<th >Estatus</th>           
+						<th >Fecha</th>
+						
+					</tr>
+			        </thead>			        
+			        <tbody>
+			        	
+			          	{%for item in saldos %}
+			          		<tr>
+				            	<td>
+				              		<a href="{{ item.get_absolute_url }}">{{ item.producto.name }}</a>
+				            	</td>
+					            <td>
+					            	{{ item.cantidad }} 
+					            </td>
+					            <td>
+					            	{{ item.get_kilos }} 
+					            </td>
+					            <td>
+					            	{{ item.observacion }} 
+					            </td>
+				            	<td>
+					            	{{ item.estatus.nombre }} 
+					            </td>
+				            	<td>
+				            		{{ item.fecha_cracion }}
+				            	</td>
+				            </tr>				            
+						{% endfor %}         
+			            
+			          				            
+			        </tbody>
+			        </table>				
+				</div>
+				 
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+{% block scripts_adicionales %}
+
+<script type="text/javascript"
+  src="{% static "js/moment.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/bootstrap-datetimepicker.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/es.js" %}">
+</script>
+<script>
+$(function () {
+    $('#datetimepicker').datetimepicker({
+        language: 'es'
+
+    });
+	
+});  
+
+</script>
+
+
+{% endblock %}  

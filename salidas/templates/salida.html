@@ -1,0 +1,92 @@
+{% extends "base.html" %} 
+{% load static from staticfiles %}
+{% block header %}
+<div class="bodywhite">
+	{% include "menucoco.html" %}
+	<div class="container">	
+		<div class="row ">
+			<div class="col-xs-9 text-left">
+				<header class="text-capitalize activo">
+					<div class="page-header">
+						<h1>{{ page_title }}</h1>
+					</div>
+				</header>
+			</div>
+			<div class="col-xs-3 text-right">
+				<header class="text-capitalize activo">
+					<h1><span class="glyphicon glyphicon-send azul" aria-hidden="true"></span></h1>
+				</header>
+			</div>
+		</div>
+    	
+{% endblock %} 
+{% block contedor %}
+		<div class="row text-center">
+				<div class="col-md-3 text-center botton thumbnail">	
+					<img src="{{ salida.producto.imagen.url }}" class="img-responsive text-center" />				    		     
+				</div> 
+				<div class="col-md-3 text-left botton ">
+					
+					<ul class="list-unstyled">									
+						<li><b>Nombre:</b> {{ salida.producto.name }}</li>
+						<li><b>Cantidad:</b> {{ salida.cantidad }}</li>
+						<li><b>Fecha de Entrada:</b>{{ salida.fecha_cracion }}</li>
+						<li>					
+						</li>	
+					</ul>
+
+				</div>
+				<div class="col-md-3 text-left botton ">
+					<form role="form" action="."  method="post" role="form" >{% csrf_token %} 
+						
+						<input class="form-control" type="hidden" name="producto" id="id_producto" value="{{salida.producto.pk}}">
+						<div class="form-group">
+							<label for="id_cantidad">Cantidad:</label>
+							<input class="form-control" type="number" name="cantidad" id="id_cantidad" value="{{ salida.cantidad }}">
+						</div>
+						<input type="text" class="form-control" name="fecha_de_salida" id="fecha_de_salida"  value="{{ salida.fecha_de_salida|date:"d/m/Y" }}" placeholder="dd/mm/yyyy"required/>
+						<input class="form-control" type="hidden" id="cantidad" value="{{ salida.cantidad }}"	>					<input type="hidden" name="stock" id="id_stock" value="">							
+						<input type="hidden" name="stock1" id="stock" value="{{salida.producto.stock}}">										
+						<button type="submit" id="comment-button" class="btn principal-btn" name="_save">Guardar</button>
+					</form>	
+				</div>
+				
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+{% block scripts_adicionales %}
+
+<script type="text/javascript"
+  src="{% static "js/moment.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/bootstrap-datetimepicker.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/es.js" %}">
+</script>
+<script>
+$(function () {
+    $('#datetimepicker').datetimepicker({
+        language: 'es'
+
+    });
+    var cantidadini = $("#id_cantidad").val();
+   $('#id_cantidad').change(function(){
+		var cantidad = 0;
+		var stock = $("#stock").val();
+		cantidad = $("#id_cantidad").val();
+
+		if(cantidad < cantidadini){
+			$("#id_stock").val(parseInt(stock)+parseInt(cantidadini - cantidad)); 
+		}else{
+			$("#id_stock").val(parseInt(stock)-parseInt(cantidad - cantidadini)); 
+		}
+	});
+});  
+</script>
+
+
+{% endblock %}  

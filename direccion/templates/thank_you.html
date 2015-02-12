@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% block header %}
+<div class="bodywhite">
+	{% include "menu.html" %}
+	<div class="container">	
+		<div class="row ">
+			<div class="col-xs-7 text-left">
+				<header class="text-capitalize activo">
+					<h1>¡Opercación exitosa!</h1>
+				</header>
+			</div>
+			<div class="col-xs-5 text-right">
+				<header class="text-capitalize activo">
+					<h1><span class="glyphicon glyphicon-ok azul-gradient" aria-hidden="true"></span></h1>
+				</header>
+			</div>
+		</div>
+    	
+{% endblock %} 
+{% block contedor %}
+		<div class="row text-center"> 
+			<div class="col-md-12 text-center botton ">   
+				<p>El pedido ha sido realizado</p>
+				<ul class="list-unstyled list-inline">
+					<li><a href="{% url 'catalogo' %}" alt="Regresar Pagina de inicio" ><span class="glyphicon glyphicon-home azul iconseis" aria-hidden="true"></span></a></li>
+					<li><a href="{% url 'order_list' %}" alt="Regresar al Catalogo"><span class="glyphicon glyphicon-shopping-cart azul iconseis" aria-hidden="true"></span></a></li>
+				</ul>
+				
+				
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

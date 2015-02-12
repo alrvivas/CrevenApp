@@ -1,0 +1,161 @@
+{% extends "base.html" %} 
+{% load static from staticfiles %}
+{% block header %}
+<div class="bodywhite">
+	{% for emp in empleado %}  	
+	  {% ifequal emp.departamento.nombre "Ventas" %}
+	    {% include "menucoco.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Producción" %}
+	    {% include "menuproduccion.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Control de Calidad" %}
+	    {% include "menucc.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Dirección" %}
+	    {% include "menudir.html" %}
+	  {% endifequal %}
+	{% empty%}
+	    No hay usuarios
+	{% endfor %}
+	<div class="container">	
+		<div class="row ">
+			<div class="col-xs-9 text-left">
+				<header class="text-capitalize activo">
+					<div class="page-header">
+						<h1>{{ page_title }}</h1>
+						<h4><a href="{{ p.categoria.get_absolute_url }}">{{ p.categoria }}</a></h4>
+					</div>
+				</header>
+			</div>
+			<div class="col-xs-3 text-right">
+				<header class="text-capitalize activo">
+					<h1><span class="glyphicon glyphicon-shopping-cart azul" aria-hidden="true"></span></h1>
+				</header>
+			</div>
+		</div>
+    	
+{% endblock %} 
+{% block contedor %}
+		<div class="row text-center">
+				<div class="col-md-3 text-center botton">
+					<div class="thumbnail">
+						<img src="{{ p.imagen.url }}" class="img-responsive text-center" />	
+					</div>	
+						
+					<div class="col-md-12 text-left botton ">
+					<ul class="list-unstyled">
+						<li><b>Nombre:</b> {{p.name}}</li>
+						<li><b>Precio:</b> ${{p.unit_price}}</li>
+						<li><b>Peso:</b> {{p.peso}} kg</li>
+						<li><b>Existencias:</b> {{p.stock}} </li>
+						<li>
+							<br />
+							{% for emp in empleado %}  	
+								{% ifequal emp.departamento.nombre "Master" %}
+									<form class="form-inline" action="." method="post" role="form">	{% csrf_token %} 
+										<div class="input-group">
+											<input type="hidden" value="{{p.pk}}" />	
+											<input class="form-control" type="number" value="{{p.stock}}" name="stock" />			
+											<span class="input-group-btn"><button type="submit" value="Actualizar" class="btn backazul"><span class="glyphicon glyphicon-upload blanco"></span></button></span>	
+										</div>													
+									</form>
+								{% endifequal %}
+								{% ifequal emp.departamento.nombre "Producción" %}
+									<b>Stock:</b> {{p.stock}}
+								{% endifequal %}
+							{% empty%}
+								No hay usuarios
+							{% endfor %}
+							<br />
+						</li>
+						<li>		
+							<!--<form method="post" action="{% url 'cart' %}" class="form-inline cart">{% csrf_token %} 
+								<div class="input-group">
+									<label class="sr-only" for="cantidad">Cantidad:</label>
+									<input id="id_producto_slug" name="add_item_id" type="hidden" value="{{p.pk}}">
+									<input class="form-control cantidad" id="cantidad" maxlength="4" min="1" name="add_item_quantity" size="2" type="number" value="1">									
+									<span class="input-group-btn"><button class="btn backazul" value="Add to cart" type="submit"><span class="glyphicon glyphicon-shopping-cart blanco"></span></button></span>	
+								</div>
+							</form>-->						
+						</li>
+					</ul>
+				</div>		    		     
+				</div> 
+				
+				{% for emp in empleado %}  	
+					{% ifequal emp.departamento.nombre "Producción" %}
+					<div class="col-md-3  text-center">	
+					<h3>Produccion Esperada</h3>
+						<a href="{{ p.get_absolute_urlpe }}">
+							<div class="col-md-10 col-md-offset-1 text-center redondo backazul">
+								<span class="glyphicon glyphicon-time iconseis padocho blanco" ></span>
+							</div>
+						</a>	    		     
+					</div> 
+					<div class="col-md-3  text-center">	
+					<h3>Capturar Produccion</h3>
+						<a href="{{ p.get_absolute_urlpr }}">
+							<div class="col-md-10 col-md-offset-1 text-center redondo backazul">
+								<span class="glyphicon glyphicon-list-alt iconseis padocho blanco" ></span>
+							</div>
+						</a>	    		     
+					</div> 
+					
+					{% endifequal %}
+					{% ifequal emp.departamento.nombre "Control de Calidad" %}
+				
+					<div class="col-md-3  text-center">	
+					<h3>Devolución Buena</h3>
+						<a href="{{ p.get_absolute_urldb }}">
+							<div class="col-md-10 col-md-offset-1 text-center redondo backazul">
+								<span class="glyphicon glyphicon-thumbs-up iconseis padocho blanco" ></span>
+							</div>
+						</a>	    		     
+					</div> 
+					<div class="col-md-3  text-center">	
+					<h3>Devolución Reproceso</h3>
+						<a href="{{ p.get_absolute_urldr }}">
+							<div class="col-md-10 col-md-offset-1 text-center redondo backverde">
+								<span class="glyphicon glyphicon-refresh iconseis padocho blanco" ></span>
+							</div>
+						</a>	    		     
+					</div>
+					<div class="col-md-3  text-center">	
+					<h3>Devolucion Mala</h3>
+						<a href="{{ p.get_absolute_urldm }}">
+							<div class="col-md-10 col-md-offset-1 text-center redondo backrojo">
+								<span class="glyphicon glyphicon-thumbs-down iconseis padocho blanco" ></span>
+							</div>
+						</a>	    		     
+					</div>
+					{% endifequal %}
+
+					{% ifequal emp.departamento.nombre "Ventas" %}
+					
+					<div class="col-md-3  text-center">	
+					<h3>Salidas</h3>
+						<a href="{{ p.get_absolute_urlsa }}">
+							<div class="col-md-10 col-md-offset-1 text-center redondo backazul">
+								<span class="glyphicon glyphicon-send iconseis padocho blanco" ></span>
+							</div>
+						</a>	    		     
+					</div>
+					<div class="col-md-3  text-center">	
+					<h3>Saldos</h3>
+						<a href="{{ p.get_absolute_urlsal }}">
+							<div class="col-md-10 col-md-offset-1 text-center redondo backverde">
+								<span class="glyphicon glyphicon-list-alt iconseis padocho blanco" ></span>
+							</div>
+						</a>	    		     
+					</div>  
+					{% endifequal %}
+				{% empty%}
+					No hay usuarios
+				{% endfor %}
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+s

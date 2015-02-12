@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block header %}
+<div class="bodywhite">
+	{% include "menu.html" %}
+	<div class="container">	
+		<div class="row ">
+			<div class="col-xs-6 text-left">
+				<header class="text-capitalize activo">
+					<h1>{{ page_title }}</h1>
+				</header>
+			</div>
+			<div class="col-xs-6 text-right">
+				<header class="text-capitalize activo">
+					<h1><span class="glyphicon glyphicon-shopping-cart azul-gradient" aria-hidden="true"></span></h1>
+				</header>
+			</div>
+		</div>
+    	
+{% endblock %} 
+{% block contedor %}
+		<div class="row text-center"> 
+			<div class="col-md-12 text-left botton ">  
+				<p>Se a cargado un costo de {{shipping_costs}} por manejo de envío</p><br />
+				<a href="{% url 'flat_process' %}">Procesar</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

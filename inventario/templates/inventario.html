@@ -1,0 +1,96 @@
+{% extends "base.html" %} 
+{% load static from staticfiles %}
+{% block header %}
+<div class="bodywhite">
+	{% include "menucoco.html" %}
+	<div class="container">	
+		<div class="row ">
+			<div class="col-xs-9 text-left">
+				<header class="text-capitalize activo">
+					<div class="page-header">
+						<h1>{{ page_title }}</h1>
+					</div>
+				</header>
+			</div>
+			<div class="col-xs-3 text-right">
+				<header class="text-capitalize activo">
+					<h1><span class="glyphicon glyphicon-thumbs-up azul" aria-hidden="true"></span></h1>
+				</header>
+			</div>
+		</div>
+    	
+{% endblock %} 
+{% block contedor %}
+		<div class="row text-center">
+				<div class="col-md-12 text-left table-responsive "> 
+			        <table  class="table">
+			        <thead>
+					<tr>
+						<th >Producto</th>
+						<th >Saldo Anterior</th>           
+						<th >Salidas/Ventas</th>
+						<th >Entradas Producción</th>
+						<th >Producción en Kilos</th>
+						<th >Devolución Reproceso</th>
+						<th >Devolución Buena</th>
+						<th >Devolución A Tirar</th>
+						<th >Saldo Actual</th>
+						
+					</tr>
+			        </thead>			        
+			        <tbody>
+			        
+			        	{% for item in producto %}
+			        	<tr>
+							<td >{{item.name}}</td>
+							<td >Saldo Anterior</td>           
+							{% for item in salidas %}
+								<td >{{item.cantidad}}</td>
+							{% endfor %}
+							<td >Entradas Producción</td>
+							<td >Producción en Kilos</td>
+							<td >Devolución Reproceso</td>
+							<td >Devolución Buena</td>
+							<td >Devolución A Tirar</td>
+							<td >Saldo Actual</td>
+							
+						</tr>
+						{% endfor %}
+			        
+			        	
+			          	        
+			            
+			          				            
+			        </tbody>
+			        </table>				
+				</div>
+				 
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+{% block scripts_adicionales %}
+
+<script type="text/javascript"
+  src="{% static "js/moment.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/bootstrap-datetimepicker.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/es.js" %}">
+</script>
+<script>
+$(function () {
+    $('#datetimepicker').datetimepicker({
+        language: 'es'
+
+    });
+	
+});  
+
+</script>
+
+
+{% endblock %}  

@@ -1,0 +1,127 @@
+{% extends "base.html" %} 
+{% load static from staticfiles %}
+{% block header %}
+<div class="bodywhite">
+	{% for emp in empleado %}  	
+	  {% ifequal emp.departamento.nombre "Ventas" %}
+	    {% include "menucoco.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Producción" %}
+	    {% include "menuproduccion.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Control de Calidad" %}
+	    {% include "menucc.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Dirección" %}
+	    {% include "menudir.html" %}
+	  {% endifequal %}
+	{% empty%}
+	    No hay usuarios
+	{% endfor %}
+	<div class="container">	
+		<div class="row ">
+			<div class="col-xs-9 text-left">
+				<header class="text-capitalize activo">
+					<div class="page-header">
+						<h1>{{ page_title }}</h1>
+					</div>
+				</header>
+			</div>
+			<div class="col-xs-3 text-right">
+				<header class="text-capitalize activo">
+					<h1><span class="glyphicon glyphicon-list-alt azul" aria-hidden="true"></span></h1>
+				</header>
+			</div>
+		</div>
+    	
+{% endblock %} 
+{% block contedor %}
+		<div class="row text-center">
+			<div class="col-md-4 col-md-offset-8 col-xs-12 text-right "> 
+				<form action="." method="GET" class="navbar-form navbar-left" role="search">  
+		            <div class="form-group col-xs-10">             
+		              <div class='input-group date' id='datetimepicker'> 
+		                <input type="text" name="q" value="{{ query|escape }}" class="form-control" placeholder="Buscar">
+		                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+		                </span>
+		              </div>
+
+		            </div> 
+		            <div class="col-xs-2">
+		              <button type="submit" class="btn backazul "><span class="glyphicon glyphicon-search blanco"></span></button>
+		            </div> 
+		            
+	          	</form>
+	         </div>
+	    </div>
+		<div class="row text-center">
+				<div class="col-md-12 text-left table-responsive "> 
+			        <table  class="table">
+			        <thead>
+					<tr>
+						<th >Producto</th>
+						<th >Realizada</th> 
+						<th >Esperada</th> 
+						<th >Eficiencia PE</th>           
+						<th >Fecha</th>
+						
+					</tr>
+			        </thead>			        
+			        <tbody>
+			        	
+			          	{%for item in produccion_r %}
+			          		<tr>
+				            	<td>
+				              		<a href="{{ item.get_absolute_url }}">{{ item.producto.name }}</a>
+				            	</td>
+					            <td>
+					            	{{ item.cantidad }} 
+					            </td>
+				            	<td>
+				            		{{ item.produccion_esperada.cantidad}}
+				            	</td>
+				            	<td>
+				            		{{ item.get_rendimiento|floatformat:2 }}%
+				            	</td>
+				            	<td>
+				            		{{ item.fecha_de_elaboracion }}
+				            	</td>
+				            </tr>				            
+						{% endfor %}         
+			            
+			          				            
+			        </tbody>
+			        </table>				
+				</div>
+				 
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+{% block scripts_adicionales %}
+
+<script type="text/javascript"
+  src="{% static "js/moment.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/bootstrap-datetimepicker.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/es.js" %}">
+</script>
+<script>
+$(function () {
+    $('#datetimepicker').datetimepicker({
+        language: 'es',
+        pickTime: false,
+        format: 'YYYY-MM-DD'
+
+    });
+	
+});  
+
+</script>
+
+
+{% endblock %}  

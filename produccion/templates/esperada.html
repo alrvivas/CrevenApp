@@ -1,0 +1,102 @@
+{% extends "base.html" %} 
+{% load static from staticfiles %}
+{% block header %}
+<div class="bodywhite">
+	{% for emp in empleado %}  	
+	  {% ifequal emp.departamento.nombre "Ventas" %}
+	    {% include "menucoco.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Producción" %}
+	    {% include "menuproduccion.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Control de Calidad" %}
+	    {% include "menucc.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Dirección" %}
+	    {% include "menudir.html" %}
+	  {% endifequal %}
+	{% empty%}
+	    No hay usuarios
+	{% endfor %}
+	<div class="container">	
+		<div class="row ">
+			<div class="col-xs-9 text-left">
+				<header class="text-capitalize activo">
+					<div class="page-header">
+						<h1>{{ page_title }}</h1>
+					</div>
+				</header>
+			</div>
+			<div class="col-xs-3 text-right">
+				<header class="text-capitalize activo">
+					<h1><span class="glyphicon glyphicon-time azul" aria-hidden="true"></span></h1>
+				</header>
+			</div>
+		</div>
+    	
+{% endblock %} 
+{% block contedor %}
+		<div class="row text-center">
+				<div class="col-md-3 text-center botton thumbnail">	
+					<img src="{{ produccion_e.producto.imagen.url }}" class="img-responsive text-center" />				    		     
+				</div> 
+				<div class="col-md-3 text-left botton ">
+					
+					<ul class="list-unstyled">
+						<li><b>Cantidad:</b> {{produccion_e.cantidad}}</li>
+						<li><b>Fecha Agendada:</b>{{produccion_e.fecha_a_agendar| date:"d/m/y  h:i  "}}</li>
+						<li>					
+						</li>	
+					</ul>
+					<form role="form" action="."  method="post" role="form">{% csrf_token %} 
+						<input name="id" type="hidden" value="{{ produccion_e.id }}" >	
+						<input name="producto" type="hidden" value="{{produccion_e.producto.id}}" >	
+						<div class="form-group">
+							<input class="form-control" name="cantidad" type="number" value="{{produccion_e.cantidad}}" >	
+						</div>
+						<input name="fecha_a_agendar" type="hidden" value="{{produccion_e.fecha_a_agendar| date:"d/m/Y  "}}" >	
+						<div class="form-group">
+							<div class="btn-group" data-toggle="buttons">									
+								<label class="btn btnactive blanco">
+									<input type="checkbox" name="realizada" value="True" autocomplete="off"  /> Realizada
+								</label>
+							</div>
+						</div>
+						<button type="submit" id="comment-button" class="btn principal-btn" name="_save">Actualizar</button>
+					</from>
+				</div>
+				<div class="col-md-3  col-md-offset-3 text-left">	
+				<h3>Capturar Produccion</h3>
+					<a href="{{ produccion_e.producto.get_absolute_urlpr }}">
+						<div class="col-md-10 col-md-offset-1 text-center redondo backazul">
+							<span class="glyphicon glyphicon-list-alt iconseis padocho blanco" ></span>
+						</div>
+					</a>		    		     
+				</div> 
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+{% block scripts_adicionales %}
+
+<script type="text/javascript"
+  src="{% static "js/moment.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/bootstrap-datetimepicker.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/es.js" %}">
+</script>
+<script>
+$(function () {
+    $('#datetimepicker').datetimepicker({
+        language: 'es'
+
+    });
+});  
+</script>
+
+
+{% endblock %}  

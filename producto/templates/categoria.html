@@ -1,0 +1,77 @@
+{% extends "base.html" %} 
+{% load static from staticfiles %}
+{% block header %}
+<div class="bodywhite">
+	{% for emp in empleado %}  	
+	  {% ifequal emp.departamento.nombre "Ventas" %}
+	    {% include "menucoco.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Producción" %}
+	    {% include "menuproduccion.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Control de Calidad" %}
+	    {% include "menucc.html" %}
+	  {% endifequal %}
+	  {% ifequal emp.departamento.nombre "Dirección" %}
+	    {% include "menudir.html" %}
+	  {% endifequal %}
+	{% empty%}
+	    No hay usuarios
+	{% endfor %}
+	<div class="container">	
+		<div class="row ">
+			<div class="col-xs-6 text-left">
+				<header class="text-capitalize activo">
+					<h1>{{ page_title }}</h1>
+				</header>
+			</div>
+			<div class="col-xs-6 text-right">
+				<header class="text-capitalize activo">
+					<h1><span class="glyphicon glyphicon-shopping-cart azul" aria-hidden="true"></span></h1>
+				</header>
+			</div>
+		</div>
+    	
+{% endblock %} 
+{% block contedor %}
+		<div class="row text-center">
+			{% for item in producto %}		
+				<div class="col-md-3 text-center botton ">	
+				    <div class="col-md-11 text-center  producto">
+					    <div class="titulo-producto">
+					    	<h3>{{item.name}}</h3>
+					    </div>	
+				    	<div >
+				    	{% for emp in empleado %}  	
+								{% ifequal emp.departamento.nombre "Ventas" %}
+				    				<a href="{{ item.get_absolute_urlsa }}"><img src="{{ item.imagen.url }}" class="img-responsive text-center" /></a>
+				    			{% else %}
+				    				<a href="{{ item.get_absolute_url }}"><img src="{{ item.imagen.url }}" class="img-responsive text-center" /></a>
+				    			{% endifequal %}
+				    			
+								
+							{% empty%}
+								No hay usuarios
+						{% endfor %}
+				    	</div >				    	            
+				    </div>			     
+				</div> 
+			{% empty %}
+				<p>Aun no agregas productos en {{ c.nombre }} :(</p>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+{% block scripts_adicionales %}
+<script type="text/javascript">	
+	    $(document).ready(function(){ 	
+			$(".producto").hover(function() {
+				$(this).find(".titulo-producto").hide();
+			},function(){
+				$(this).find(".titulo-producto").show();
+			});				
+		});
+    </script>
+{% endblock %}  

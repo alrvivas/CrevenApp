@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% load i18n %}
+{% load url from future %}
+{% load input_css %} 
+{% block header %}
+<div class="bodywhite">
+	{% include "menu.html" %}
+	<div class="container">	
+		<div class="row ">
+			<div class="col-xs-6 text-left">
+				<header class="text-capitalize activo">
+					<h1>Pedido </h1>
+				</header>
+			</div>
+			<div class="col-xs-6 text-right">
+				<header class="text-capitalize activo">
+					<h1><span class="glyphicon glyphicon-shopping-cart azul-gradient" aria-hidden="true"></span></h1>
+				</header>
+			</div>
+		</div>
+    	
+{% endblock %} 
+{% block contedor %}
+<div class="row text-center"> 
+      <div class="col-md-12 text-left table-responsive "> 
+        <table summary="Your Shopping Cart" id="shopping_cart" class="table">
+        <thead>
+          <tr>
+            <th >Producto</th>
+            <th >Peso kg</th>           
+            <th >Precio</th>
+            <th >Cantidad</th>  
+            <th>Total Kg</th>       
+            <th scope="col" >Total</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th >
+              {{cart.total_peso}}Kg
+            </th>
+            <th >
+              ${{cart.total_price|floatformat:2}}
+            </th>
+            <th></th>
+          </tr>
+          {% if cart_items %}
+            <tr>
+              <th class="text-right" colspan="7">
+                <a href="{% url 'checkout_selection' %}" class="btn backazul blanco"><span class="glyphicon glyphicon-shopping-cart blanco"></span></a>                
+              </th>
+            </tr>
+          {% endif %}
+        </tfoot>
+        <tbody>
+        {% if cart_items %}
+         <form method="post" action="{% url 'cart_update' %}" class="form-inline cart">{% csrf_token %}     
+              {{ formset.management_form }}  
+          {% for form in formset %}
+          {% with form.quantity as field %}
+          <tr>
+            <td>
+              <a href="{{ form.instance.product.get_absolute_url }}" class="cart">
+                {{ form.instance.product.get_name }}
+              </a>
+            </td>
+            <td>
+              {{ form.instance.product.peso|floatformat:3 }}  
+            </td>
+            
+            <td>${{ form.instance.product.get_price|floatformat:2}}</td>
+            <td class="right">
+                      
+                <div class="input-group">      
+                  {{ form.id }}            
+                  {{field|addcss:"form-control"}}
+                  {{ field.errors }}
+                  <span class="input-group-btn">
+                    <button type="submit" name="submit" value="Update" class="btn backazul"><span class="glyphicon glyphicon-upload blanco"></span></button>
+                  </span>
+                </div>              
+              
+            </td>
+            <td>
+              {{form.instance.line_subtotalpeso}}
+            </td>
+            <td class="right">
+              ${{ form.instance.line_subtotal }}
+            </td>
+            <td>
+              
+                <input type="hidden" name="item_id" value="{{ item.id }}" />
+                <!--<button type="submit" name="submit" value="Remove" class="btn backtransparent"><span class="glyphicon glyphicon-remove-circle rojo iconuno"></span></button>-->
+              
+            </td>
+            
+          </tr>
+          {% endwith %}
+          {% endfor %}
+          </form>
+        {% else %}
+          <tr>
+            <td colspan="6" style="height:30px;">
+              Tu pedido esta vacio
+            </td>
+          </tr>
+          {% endif %}
+        </tbody>
+        </table>               
+      </div> 
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "base.html" %} 
+{% load static from staticfiles %}
+{% block header %}
+<div class="bodywhite">
+	{% include "menucc.html" %}
+	<div class="container">	
+		<div class="row ">
+			<div class="col-xs-9 text-left">
+				<header class="text-capitalize activo">
+					<div class="page-header">
+						<h1>{{ page_title }}</h1>
+					</div>
+				</header>
+			</div>
+			<div class="col-xs-3 text-right">
+				<header class="text-capitalize activo">
+					<h1><span class="glyphicon glyphicon-refresh  verde" aria-hidden="true"></span></h1>
+				</header>
+			</div>
+		</div>
+    	
+{% endblock %} 
+{% block contedor %}
+		<div class="row text-center">
+				<div class="col-md-3 text-center botton thumbnail">	
+					<img src="{{ p.imagen.url }}" class="img-responsive text-center" />				    		     
+				</div> 
+				<div class="col-md-3 text-left botton ">
+					<ul class="list-unstyled">
+						<li><b>Nombre:</b> {{p.name}}</li>
+						<li><b>Precio:</b> ${{p.unit_price}}</li>
+						<li><b>Peso:</b> {{p.peso}} kg</li>
+						
+					</ul>
+				</div>
+				<div class="col-md-3  col-md-offset-3 text-left">	
+				<h3>Devolución Reproceso</h3>
+					<form role="form" action="."  method="post" role="form">{% csrf_token %} 
+						<div class="form-group">
+							<input type="hidden" name="producto" id="producto" value="{{p.pk}}" />
+							<label for="cantidad">Fecha</label>
+							<div class='input-group date' id='datetimepicker'>								
+								<input type="text" class="form-control" name="fecha_de_entrada" id="fecha_de_entrada"  placeholder="dd/mm/yyyy" required/>
+								<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+								</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="id_cantidad">Cantidad:</label>
+							<input type="number" class="form-control" id="id_cantidad" name="cantidad" autofocus required/>
+						</div>
+						<div class="form-group">
+							<label for="id_cantidad">Observación:</label>	
+							<textarea  class="form-control" name="observacion"></textarea>
+						</div>					
+						<button type="submit" id="comment-button" class="btn principal-btn" name="_save">Guardar</button>
+					</form>			    		     
+				</div> 
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+{% block scripts_adicionales %}
+
+<script type="text/javascript"
+  src="{% static "js/moment.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/bootstrap-datetimepicker.js" %}">
+</script>
+<script type="text/javascript"
+  src="{% static "js/es.js" %}">
+</script>
+<script>
+$(function () {
+	var f = new Date();
+    $('#datetimepicker').datetimepicker({
+        language: 'es',
+        pickTime: false,
+        defaultDate: f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear()
+
+    });
+    
+});  
+</script>
+
+
+{% endblock %}  
